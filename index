@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Family Expat Guide 2025–2026</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #faf9f7; }
+    button { font-family: inherit; }
+    table { border-collapse: collapse; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    const destinations = [
+      {
+        id: "mexico_city", name: "Mexico City", country: "Mexico", flag: "🇲🇽", region: "Americas",
+        tagline: "Walkable, vibrant, & shockingly affordable",
+        visa: { score: 5, label: "Easiest", summary: "No visa needed for up to 180 days as a tourist. For a full year, apply for a Temporary Resident Visa (TRV) before leaving the US — valid 1–4 years.", details: ["180-day tourist entry, no visa required","Temporary Resident Visa (TRV) for 1–4 years: apply at a Mexican consulate in the US","Financial proof required (income or savings)","Processing: 1–4 weeks at consulate","Family included on one application","No remote work restrictions on TRV"], difficulty: "Very Easy" },
+        cost: { score: 5, label: "Cheapest", monthly: "$2,400–3,500", rent: "$1,200–2,000/mo (2BR in Roma/Condesa)", notes: "48% cheaper than Paris. Groceries ~74% less than US. World-class restaurants for $5–8." },
+        schooling: { score: 4, summary: "Public schools free & open to expats. Many bilingual private schools. Strong international school scene.", details: ["Public kindergartens free and open to foreign residents","Strong bilingual Spanish/English private preschool options for $300–600/mo","Large expat community with international school options","At 4, child can attend preschool (preescolar) immediately","No language barrier for enrollment — schools used to expats"] },
+        pet: { score: 5, label: "Easiest", summary: "Very simple. Health certificate from your vet + proof of rabies vaccine. No quarantine. Free for 1–3 pets.", details: ["Health certificate (issued within 15 days of travel)","Rabies vaccination proof","Microchip recommended","No quarantine required","Free for 1–3 personal pets","Quick inspection at border"] },
+        transit: { score: 5, label: "World-Class", summary: "Nearly every neighborhood inside the Circuito Interior scores 95+ for walkability. Metro, Metrobús, Uber/DiDi, and 90+ miles of bike lanes.", details: ["One of the most walkable cities in Latin America","Metro + Metrobús covers the city cheaply","90+ miles of protected bike lanes (ecobici bike share)","Uber/DiDi very cheap (~$3–5 per ride)","No car needed in central neighborhoods (Roma, Condesa, Polanco, Coyoacán)"] },
+        flights: { score: 3, summary: "No direct flights to ORF/RIC. ~5–6 hrs via Houston or Dallas. Fares moderate ($250–400 RT). Multiple airlines.", hub: "MEX → IAH or DFW → ORF/RIC" },
+        safety: { score: 3, summary: "Central neighborhoods (Roma, Condesa, Polanco, Coyoacán) are very safe for families. Avoid outlying areas. US State Dept: exercise increased caution in CDMX." },
+        english: { score: 3, summary: "Spanish-speaking. In expat neighborhoods, moderate English. Expat community is large and welcoming." },
+        pros: ["Incredible food & culture","Massive expat community","No car needed","Close to US","Affordable healthcare"],
+        cons: ["Must learn Spanish","Air quality can be poor","Altitude (7,300 ft) adjustment","Some safety concerns outside tourist areas"]
+      },
+      {
+        id: "mexico_broad", name: "Mexico (Broad)", country: "Mexico", flag: "🇲🇽", region: "Americas",
+        tagline: "Oaxaca, San Miguel, Puerto Vallarta & more",
+        visa: { score: 5, label: "Easiest", summary: "Same as Mexico City — 180-day tourist entry or TRV for extended stays. Identical process.", details: ["180-day tourist entry","TRV for 1–4 years applied at US consulate","Works for any Mexican city/state","Consider San Miguel de Allende (huge expat scene), Oaxaca, Mérida, Puerto Vallarta"], difficulty: "Very Easy" },
+        cost: { score: 5, label: "Cheapest", monthly: "$1,800–3,000", rent: "$700–1,500/mo (2BR, smaller cities)", notes: "Smaller cities like Oaxaca or Mérida are 20–40% cheaper than CDMX with equally high quality of life." },
+        schooling: { score: 4, summary: "Same access as CDMX. Expat hubs like San Miguel or Puerto Vallarta have English-medium private schools.", details: ["Free public schools open to expats","Bilingual private schools in expat-heavy towns","San Miguel de Allende especially well-set-up for English-speaking families","Puerto Vallarta has several international schools"] },
+        pet: { score: 5, label: "Easiest", summary: "Identical to CDMX — simple, no quarantine, cheap.", details: ["Same as Mexico City"] },
+        transit: { score: 3, label: "Varies", summary: "Walkability varies hugely. Historic centers of Oaxaca & San Miguel are very walkable; coastal towns less so. A car is helpful outside city cores.", details: ["Colonial towns (Oaxaca, San Miguel, Mérida) very walkable historic cores","Beach towns (Puerto Vallarta, Sayulita) more car-dependent","Local buses cheap everywhere","Uber/DiDi in major cities"] },
+        flights: { score: 3, summary: "Varies by city. PVR (Puerto Vallarta) has direct flights to US hubs. OAX (Oaxaca) requires 1 stop. Fares moderate.", hub: "Depends on city" },
+        safety: { score: 3, summary: "Generally safe in popular expat towns. San Miguel and Mérida considered very safe. Research specific state advisories." },
+        english: { score: 3, summary: "Expat towns like San Miguel have large English-speaking communities. Otherwise Spanish dominates." },
+        pros: ["More affordable than CDMX","Quieter/slower pace","Large expat communities in some towns","Beautiful scenery"],
+        cons: ["May need a car in some areas","Fewer direct flights to East Coast","Less international school variety","Some areas have safety concerns"]
+      },
+      {
+        id: "montreal", name: "Montréal", country: "Canada", flag: "🇨🇦", region: "North America",
+        tagline: "Bilingual, cultured, close to home",
+        visa: { score: 4, label: "Easy", summary: "US citizens can stay up to 6 months without a visa. For a full year, apply for a Visitor Record extension before the 6 months expire.", details: ["6-month tourist stay, no visa needed for US citizens","Extend via IRCC (Immigration, Refugees and Citizenship Canada) online — possible but not guaranteed","No digital nomad visa; remote workers for foreign employers technically OK as visitors","For truly 1 full year: apply for Visitor Record extension before 6 months expire","Quebec has provincial immigration rules — separate from federal for longer stays","No work permit for employment in Canada without sponsorship"], difficulty: "Moderate (for full year)" },
+        cost: { score: 3, label: "Moderate", monthly: "$3,500–5,000", rent: "$1,800–2,800/mo (2BR, central)", notes: "Cheapest major Canadian city. Still pricier than Mexican or European options but very close to home." },
+        schooling: { score: 5, label: "Best", summary: "Seamless. English public schools available. Free, high-quality, and immediately accessible for expat families.", details: ["English-language public school system (EMSB) — free and excellent","French immersion also an option for the language experience","CPE (subsidized daycare) for under 5s — very affordable ($10–15/day)","4-year-olds can attend pre-K (maternelle 4 ans) free","No language barrier for enrollment","No documentation hurdles for US citizens"] },
+        pet: { score: 5, label: "Easiest", summary: "Same as entering the US. Rabies vaccine + vet health certificate. No quarantine. Trivially easy from the US.", details: ["Rabies vaccine required","Health certificate from licensed vet","No quarantine","No microchip required (but recommended)","Drive or fly with your cat seamlessly"] },
+        transit: { score: 4, label: "Excellent", summary: "Great metro (STM), buses, and an excellent bike-share (BIXI). Very walkable in Plateau, Mile End, Old Montreal neighborhoods.", details: ["STM metro: 4 lines, very reliable","BIXI bike-share with hundreds of stations","Excellent cycling infrastructure","Very walkable in inner neighborhoods","Car-free lifestyle very achievable in central areas"] },
+        flights: { score: 5, label: "Best", summary: "YUL (Montréal-Trudeau) has direct flights to DCA/IAD. ~1.5 hrs. Very cheap fares ($80–200 RT). Easiest on the list.", hub: "YUL → DCA/IAD → short drive to ORF/RIC" },
+        safety: { score: 5, summary: "Extremely safe. One of the safest major cities in North America. Low violent crime." },
+        english: { score: 5, label: "Best", summary: "Officially bilingual. Most Montréalers speak English. Large anglophone community. No language barrier for daily life." },
+        pros: ["English widely spoken","Best schooling access","Closest to home (1.5 hr flight)","Safe","Vibrant culture","Pet-friendly"],
+        cons: ["Cold winters","Visa for full year is tricky (only 6-month automatic)","Higher cost than Mexico/Europe","May not feel 'abroad' enough"]
+      },
+      {
+        id: "quebec_city", name: "Québec City", country: "Canada", flag: "🇨🇦", region: "North America",
+        tagline: "Fairytale European charm in North America",
+        visa: { score: 4, label: "Easy", summary: "Same as Montréal — 6 months automatic, extend via IRCC for longer. Technically straightforward.", details: ["Same federal rules as Montréal","6-month automatic stay","Visitor Record extension available","More French-dominant city than Montréal"], difficulty: "Moderate (for full year)" },
+        cost: { score: 4, label: "Affordable", monthly: "$2,800–4,000", rent: "$1,400–2,200/mo (2BR, central)", notes: "Significantly cheaper than Montréal or Toronto. One of the more affordable major Canadian cities." },
+        schooling: { score: 4, summary: "English schools exist but fewer than Montréal. French immersion is the dominant option. Very good quality overall.", details: ["English public schools available but fewer options than Montréal","French immersion strongly encouraged — a wonderful immersion for a 4-year-old","Subsidized daycare (CPE) system same as Montréal","High quality, free public education"] },
+        pet: { score: 5, label: "Easiest", summary: "Identical to Montréal — trivially easy from the US.", details: ["Same as Montréal/Canada"] },
+        transit: { score: 3, label: "Good (Old City)", summary: "Old Québec is extremely walkable and compact. Outside the walls, more car-dependent. Good bus system. No metro.", details: ["Old Québec (Vieux-Québec) is exceptionally walkable","Bus system covers the wider city","No metro/subway system","Cycling infrastructure improving","Car helpful if living outside Old City"] },
+        flights: { score: 4, summary: "YQB has flights to US hubs but fewer than Montréal. ~2.5–3 hrs to ORF/RIC via connections. Slightly more effort.", hub: "YQB → YUL or direct US hubs" },
+        safety: { score: 5, summary: "One of the safest cities in North America. Very low crime rate. Family-friendly." },
+        english: { score: 3, summary: "Predominantly French-speaking. Less English than Montréal. You'll need basic French or a learning mindset. Tourist areas more English-friendly." },
+        pros: ["Stunning historic city (UNESCO)","Very safe","Affordable vs. Montréal","Magical winters (if you like snow)","Close to US"],
+        cons: ["Very French — English limited outside Old City","No metro","Colder than Montréal","Smaller expat community","Fewer direct US flights"]
+      },
+      {
+        id: "costa_rica", name: "Costa Rica", country: "Costa Rica", flag: "🇨🇷", region: "Central America",
+        tagline: "Nature, pura vida, and a well-worn expat trail",
+        visa: { score: 4, label: "Easy", summary: "US citizens get 180 days as a tourist. For a full year, apply for a Rentista, Digital Nomad, or Pensionado visa. Residency can be processed in-country.", details: ["180-day tourist entry, no visa needed","Rentista visa: prove $2,500/month passive income for 2 years","Pensionado visa: $1,000/month pension income","Digital nomad (Nómada Digital) visa: $3,000/month income, 1-year stay","Can apply for residency while in Costa Rica","Border run (to Nicaragua/Panama) resets tourist stamp","Processing time 6–12 months for formal residency"], difficulty: "Easy" },
+        cost: { score: 4, label: "Affordable", monthly: "$2,500–4,000", rent: "$1,000–2,000/mo (2BR, San José suburbs)", notes: "More expensive than Mexico, less than Europe. Central Valley (Escazú, Santa Ana) priciest. More rural areas very cheap." },
+        schooling: { score: 4, summary: "Free public education open to expats. Large bilingual private school sector. 4-year-olds can attend free public preschool.", details: ["Free public preschool from age 4","Private bilingual schools $200–600/month in San José area","Several English-medium international schools in Escazú/Santa Ana","High literacy rate — education is a point of national pride","Generally easy enrollment for expat families"] },
+        pet: { score: 5, label: "Easiest", summary: "Very welcoming to pets. Health cert + vaccines + microchip + parasite treatment. No quarantine. One of the easiest countries.", details: ["Health certificate (within 15 days of travel)","Rabies vaccination (at least 1 month before travel)","Microchip required","Parasite treatment (within 15 days)","No quarantine","Up to 5 personal pets, no permit needed"] },
+        transit: { score: 2, label: "Car Recommended", summary: "San José has buses but they're complex. Most expats use a car. Walking/biking limited outside certain central areas.", details: ["San José public buses: affordable but confusing for non-Spanish speakers","No metro/subway","Uber available in San José","Most expat areas (Escazú, Santa Ana) are quite car-dependent","Beach/mountain towns almost entirely car-dependent","⚠️ This is a potential deal-breaker given your car-free requirement"] },
+        flights: { score: 4, summary: "SJO (San José) has direct flights to IAD (Dulles) and multiple US hubs. ~3.5–4 hrs. Good frequency, reasonable fares.", hub: "SJO → IAD/MIA/ATL → ORF/RIC" },
+        safety: { score: 4, summary: "Safest country in Central America. Low violent crime in expat areas. Exercise normal caution in parts of San José. Child-friendly." },
+        english: { score: 4, summary: "Large English-speaking expat community. Tourist and business areas have strong English. Spanish helpful but not critical in expat zones." },
+        pros: ["Nature & biodiversity","Safe","Large US expat community","Good healthcare","Easy border proximity"],
+        cons: ["⚠️ Car essentially required outside San José","Rainy season is intense","Higher cost than Mexico","Residency process slow (6–12 months)"]
+      },
+      {
+        id: "paris", name: "Paris", country: "France", flag: "🇫🇷", region: "Europe",
+        tagline: "The dream, but with serious visa paperwork",
+        visa: { score: 3, label: "Moderate", summary: "US citizens get 90 days visa-free (Schengen). For a full year, apply for a Long-Stay Visa (VLS-TS) at the French consulate in the US.", details: ["90-day Schengen visa-free stay","Long-Stay Visa (VLS-TS, type D): 4 months to 1 year","Visitor Long-Stay: show proof of funds (€1,500–2,500/mo), no work","Auto-entrepreneur or digital nomad option if freelancing","Apply 3 months before departure at French consulate","Must register with OFII within 3 months of arrival","For remote workers employed by US company: Visitor visa technically sufficient","ETIAS (EU travel authorization) expected — minor online requirement"], difficulty: "Moderate" },
+        cost: { score: 2, label: "Expensive", monthly: "$5,000–8,000", rent: "$2,500–4,000/mo (2BR, central arrondissements)", notes: "Expensive. Strong USD helps. Montpellier is 30–40% cheaper than Paris." },
+        schooling: { score: 5, label: "Best", summary: "France mandates school from age 3. Your 4-year-old can attend free local maternelle (kindergarten) immediately. Excellent quality.", details: ["Compulsory schooling from age 3 — unique in Europe","Maternelle (kindergarten) free and open to all legal residents","Register at the town hall (mairie) → assigned local school","International sections (Section Internationale) available in some schools","French immersion at this age is remarkably effective","Private bilingual schools also available (~€800–2,500/mo)"] },
+        pet: { score: 4, label: "Easy", summary: "Standard EU pet travel. Microchip + rabies vaccine (21+ days before travel) + USDA-endorsed health certificate. No quarantine.", details: ["ISO microchip required","Rabies vaccine at least 21 days before entry","USDA-endorsed health certificate (non-commercial EU cert)","Arrive within 10 days of USDA endorsement","No quarantine","Cats very welcome in France — café culture embraces pets"] },
+        transit: { score: 5, label: "World-Class", summary: "Among the best transit systems on Earth. Métro, RER, buses, Vélib bike share. Paris consistently ranks top 5 globally for walkability.", details: ["16 métro lines + RER","Vélib' bike share (over 1,400 stations)","World-class walkability — top 5 globally in European studies","Car entirely unnecessary","Stroller/child-friendly in most neighborhoods","Taxis & Uber widely available"] },
+        flights: { score: 4, summary: "CDG has direct flights to IAD/Dulles (~7.5 hrs). Multiple daily departures. Fares $400–700 RT. Not cheap but very direct.", hub: "CDG → IAD → short drive or connector to ORF/RIC" },
+        safety: { score: 4, summary: "Generally very safe. Petty theft/pickpocketing in tourist areas. Avoid certain suburbs. Families with kids do very well in residential neighborhoods." },
+        english: { score: 3, summary: "Less English than popular belief. French dominates daily life. Parisians increasingly speak English, especially under 40. Managing without French is doable but limiting." },
+        pros: ["World-class city","Free schooling from age 3","Incredible food & culture","Best transit in the world","Travel across Europe easily"],
+        cons: ["Very expensive","French language essential for daily life","Visa paperwork (moderate)","Paris housing is very competitive"]
+      },
+      {
+        id: "montpellier", name: "Montpellier", country: "France", flag: "🇫🇷", region: "Europe",
+        tagline: "Paris vibes, 40% cheaper, near the sea",
+        visa: { score: 3, label: "Moderate", summary: "Identical to Paris — same French long-stay visa process applies to all of France.", details: ["Same VLS-TS process as Paris","Apply at French consulate in the US","Montpellier is in the Hérault department — one of most expat-friendly southern cities","Slightly lower financial proof required than Paris"], difficulty: "Moderate" },
+        cost: { score: 3, label: "Moderate", monthly: "$3,000–4,500", rent: "$1,500–2,200/mo (2BR, central)", notes: "30–40% cheaper than Paris. Mediterranean climate. Strong student/expat community. Near beaches." },
+        schooling: { score: 5, label: "Best", summary: "Same French national system — free maternelle from age 3. One of France's largest university cities with strong educational infrastructure.", details: ["Same free maternelle (age 3+) as all of France","Register at mairie → assigned neighborhood school","Montpellier has a large international student population","Some bilingual private schools available","Mediterranean climate makes school days more pleasant"] },
+        pet: { score: 4, label: "Easy", summary: "Same EU pet travel rules as Paris. No quarantine, standard EU documentation.", details: ["Same as Paris/France — EU pet passport process"] },
+        transit: { score: 4, label: "Excellent", summary: "Excellent tram network (4 lines), buses, and very bike-friendly. Compact enough to cycle everywhere. Car not needed in central areas.", details: ["4 tram lines covering the city","Very bike-friendly — flat terrain","Vélomagg bike share system","Compact city center is highly walkable","Car unnecessary in central Montpellier"] },
+        flights: { score: 3, summary: "MPL has limited international connections. Usually fly via Paris (CDG/ORY) to reach IAD. Adds ~1 hour. Fares similar to Paris.", hub: "MPL → CDG → IAD" },
+        safety: { score: 4, summary: "Generally safe city. Some rougher suburbs like in all French cities. Central neighborhoods very safe for families." },
+        english: { score: 3, summary: "Large student population means more English speakers than average French city. Still primarily French. University crowd very English-friendly." },
+        pros: ["Much cheaper than Paris","Mediterranean climate & beaches nearby","Free schooling from 3","Great trams & bikes","Smaller, more manageable city"],
+        cons: ["French essential","Fewer direct flights to US","Smaller expat community than Paris","Still requires French long-stay visa"]
+      },
+      {
+        id: "barcelona", name: "Barcelona", country: "Spain", flag: "🇪🇸", region: "Europe",
+        tagline: "Europe's most walkable city — if you can afford it",
+        visa: { score: 3, label: "Moderate", summary: "Non-Lucrative Visa (NLV) is the main route for non-working US citizens. Requires ~$48,000/year in passive income for a family of 3. If working remotely, use the Digital Nomad Visa instead.", details: ["90-day Schengen entry visa-free","Non-Lucrative Visa (NLV): $32,000/yr main applicant + $8,000/yr per dependent (2026 rates)","For family of 3: ~$48,000/year required","Must NOT work or telework (strict in 2025/26)","If working remotely: apply for Digital Nomad Visa instead","Apply at Spanish consulate in your US state (DC consulate for VA/DC/MD)","Processing: 4–8 weeks","Must arrive in Spain within 90 days of visa approval","Register (Empadronamiento) within first weeks of arrival","Apply for TIE (foreigner ID) within 30 days"], difficulty: "Moderate" },
+        cost: { score: 3, label: "Moderate", monthly: "$3,500–5,500", rent: "$1,800–3,000/mo (2BR, central)", notes: "Cheaper than Paris/London. Overtourism has pushed rents up significantly. Eixample and Gràcia are family-friendly neighborhoods." },
+        schooling: { score: 4, summary: "Free public schools open to all legal residents. Catalan is the language of instruction. International schools widely available. Expats with kids do very well.", details: ["Free public education from age 3 (P3) for all legal residents","Instruction in Catalan (with Spanish as second language)","Many English-medium international schools (€800–2,500/mo)","IB programs available","Large expat community means well-established school pathways","Register with local school via municipality"] },
+        pet: { score: 4, label: "Easy", summary: "Same EU pet rules as France. Microchip + rabies (21+ days before) + USDA-endorsed EU health cert. No quarantine. Spain is very pet-friendly.", details: ["ISO microchip","Rabies vaccine 21+ days before arrival","USDA-endorsed non-commercial EU health certificate","No quarantine","Spain is extremely pet-friendly — pets welcome in many restaurants and public spaces"] },
+        transit: { score: 5, label: "World-Class", summary: "Ranked #1 most walkable city center in Europe. Excellent metro, buses, Bicing bike share, and iconic pedestrian streets.", details: ["#1 most pedestrian-friendly city center in Europe (2023 study)","12 metro lines","Bicing bike share + protected lanes","Superblocks (Superilles) reducing car traffic","Extremely walkable Eixample grid","Car entirely unnecessary"] },
+        flights: { score: 4, summary: "BCN has direct flights to IAD (Dulles) and JFK. ~8–9 hrs. Multiple airlines, ~$500–700 RT. Not direct to ORF but IAD is manageable.", hub: "BCN → IAD → short drive to ORF/RIC" },
+        safety: { score: 4, summary: "Very safe city overall. Pickpocketing on La Rambla and transit is a concern. Family neighborhoods (Sarrià, Gràcia) very safe. Keep valuables secure." },
+        english: { score: 3, summary: "Spanish (and Catalan) dominant. Large international expat community; English widely spoken in business/expat circles. Daily life requires some Spanish." },
+        pros: ["#1 walkable city in Europe","Free school from age 3","Beautiful climate","Incredible food & culture","Great beaches"],
+        cons: ["NLV has strict no-work rule + high income requirement","Catalan in schools (not Spanish or English)","Overtourism pushing rents up","Visa paperwork"]
+      },
+      {
+        id: "london", name: "London", country: "UK", flag: "🇬🇧", region: "Europe",
+        tagline: "No language barrier, but at a serious cost",
+        visa: { score: 2, label: "Difficult", summary: "No simple 'move to London' visa for US citizens without a job offer or specific qualifying category. Tourist entry is 6 months only.", details: ["6-month tourist entry, no visa needed","No 'passive income' or 'non-lucrative' visa like Spain/France","Options: Skilled Worker visa (needs UK job offer), Global Talent visa (highly competitive), Ancestry visa (if UK grandparent)","UK Innovator Founder visa: requires business plan + endorsement","No digital nomad visa currently","For a family year-stay: most Americans must use tourist entry (6 mo) or find another route","Post-Brexit: Americans now treated like any other non-EU citizen"], difficulty: "Hard" },
+        cost: { score: 1, label: "Most Expensive", monthly: "$7,000–12,000", rent: "$3,500–6,000/mo (2BR, central/good areas)", notes: "Most expensive on this list. London is consistently one of the priciest cities in the world. Strong USD helps, but still very costly." },
+        schooling: { score: 4, summary: "Excellent free state schools for legal residents. However, with only tourist status (6 months), school access may be limited. International schools are world-class but expensive.", details: ["Free state schools for legal residents — excellent quality","School access tied to residency status","On tourist visa (6 months): enrollment complex","International schools: £15,000–30,000/yr","At 4: Reception year in state school free if residency established"] },
+        pet: { score: 3, label: "Moderate", summary: "Post-Brexit UK has its own (non-EU) pet entry rules. Microchip + rabies vaccine + USDA-endorsed UK health cert. No quarantine if compliant.", details: ["ISO microchip","Rabies vaccine (21+ days before)","USDA-endorsed Great Britain health certificate","Note: Norway & UK follow similar protocols (not EU)","No quarantine if compliant","More paperwork than EU but manageable for cats"] },
+        transit: { score: 5, label: "World-Class", summary: "The Tube, buses, Overground, Elizabeth line, cycling infrastructure. World-renowned transit. Car absolutely not needed.", details: ["The Underground (Tube): 11 lines","TfL buses: 700+ routes","Elizabeth line, Overground","Santander Cycles bike share","Oyster card makes everything seamless","Car entirely unnecessary"] },
+        flights: { score: 5, label: "Best", summary: "LHR/LGW have direct flights to IAD daily. ~7 hrs. Highest flight frequency of any European city. United, BA, Virgin Atlantic.", hub: "LHR → IAD → ORF/RIC" },
+        safety: { score: 4, summary: "Generally very safe. Petty theft common. Certain areas less safe at night. Family neighborhoods (Islington, Richmond, Wimbledon) excellent." },
+        english: { score: 5, label: "Best", summary: "It's English. Zero language barrier. Completely seamless transition." },
+        pros: ["English speaking — zero language barrier","World-class transit","Excellent state schools (if established residency)","Best flight connections to DC airports","Cultural powerhouse"],
+        cons: ["⚠️ No clear 1-year visa pathway for US citizens","Most expensive option by far","Brexit complicated everything","School access unclear on tourist visa"]
+      },
+      {
+        id: "japan", name: "Japan", country: "Japan", flag: "🇯🇵", region: "Asia",
+        tagline: "Extraordinary, but your cat needs 6 months prep",
+        visa: { score: 3, label: "Moderate", summary: "90-day tourist entry (extendable once to 180 days). Digital Nomad visa: up to 6 months (non-renewable). For a full year, a Cultural Activities or other specific visa is needed.", details: ["90-day tourist entry, extendable to 180 days at immigration office","Digital Nomad Visa: 6 months max, non-renewable, income ~¥30M (~$200k) in bank OR proof of foreign income","For a full year: Cultural Activities visa, Spouse visa, or find another category","No simple 'passive income' long-stay visa","Student visa possible if enrolling in Japanese language school","Most families do: 90-day tourist → extend → leave/re-enter for second 90 days","Complex bureaucracy; Japanese language barriers in process"], difficulty: "Moderate-Hard" },
+        cost: { score: 3, label: "Moderate", monthly: "$3,000–5,000", rent: "$1,500–2,500/mo (2BR, Tokyo; cheaper in Osaka/Kyoto)", notes: "More affordable than its reputation. JPY weakness has made Japan cheap for USD earners. Outside Tokyo significantly cheaper." },
+        schooling: { score: 3, summary: "Public schools open to expat children. Instruction in Japanese — immersive but demanding. International schools widely available in Tokyo/Osaka.", details: ["Public elementary school open to expat children — free","Instruction entirely in Japanese","Many international schools in Tokyo (American, British, etc.) — $15,000–25,000/yr","At age 4: yochien (kindergarten) — public or private","Excellent educational culture but language barrier is real","Expat children often thrive in immersion schools"] },
+        pet: { score: 1, label: "Hardest", summary: "⚠️ Japan requires a 180-day waiting period after a rabies titer blood test before your cat can arrive. START 7+ MONTHS BEFORE YOU MOVE. Non-compliance means up to 180-day quarantine.", details: ["ISO microchip (must be implanted FIRST)","Two rabies vaccinations minimum","Rabies antibody titer test at USDA-approved lab","180-day waiting period after titer test — this is the key bottleneck","Notify Japan's AQS 40 days before arrival","If all requirements met: 12-hour inspection on arrival","If not met: up to 180-day quarantine (very stressful for cats)","START PROCESS 7+ MONTHS BEFORE MOVING"] },
+        transit: { score: 5, label: "World-Class", summary: "Japan's train/subway system is the best in the world. Tokyo, Osaka, Kyoto are all supremely walkable and transit-rich. Car completely unnecessary.", details: ["Tokyo: 13 subway lines + JR + private railways","99.9% on-time reputation","IC card (Suica/Pasmo) works everywhere","Bicycling extremely common and safe","Extremely walkable neighborhoods","No car ever needed"] },
+        flights: { score: 2, summary: "NRT/HND to IAD: ~13–14 hrs nonstop. Long haul with a 4-year-old. Fares $700–1,200 RT. Expensive and exhausting.", hub: "NRT → IAD/JFK → ORF/RIC" },
+        safety: { score: 5, label: "Safest", summary: "Japan is among the safest countries in the world. Virtually no violent crime. Children play outside unsupervised. Extraordinarily safe for families." },
+        english: { score: 2, summary: "Limited English in daily life outside tourist areas. Signage is often bilingual. Apps like Google Translate are essential. Expat community in Tokyo is supportive." },
+        pros: ["Safest country on the list","World-class transit","Extraordinary culture & food","Affordable with strong USD","Unique life experience"],
+        cons: ["⚠️ Cat requires 7+ months advance prep","Language barrier significant","Long flight from East Coast","Complex visa for full year","Cultural adjustment is steep"]
+      },
+      {
+        id: "oslo", name: "Oslo", country: "Norway", flag: "🇳🇴", region: "Europe",
+        tagline: "Spectacular nature, sky-high prices",
+        visa: { score: 3, label: "Moderate", summary: "Norway is Schengen but NOT EU. US citizens get 90 days visa-free. For a full year, apply for an Independent Means visa at the Norwegian Embassy. Income requirement is high.", details: ["90-day Schengen entry visa-free","Independent Means residence permit: must show sufficient funds to live without working","No official threshold published, but expect to demonstrate ~$50,000+/year","Apply at Royal Norwegian Embassy in Washington, D.C.","Processing time: 3–6 months","Norway is NOT in the EU but follows Schengen rules","Remote workers: technically not permitted to work for foreign employers without a permit","Complex, less common pathway than Spain or France"], difficulty: "Moderate-Hard" },
+        cost: { score: 1, label: "Most Expensive", monthly: "$7,000–11,000", rent: "$3,000–5,000/mo (2BR, Oslo)", notes: "Oslo is one of the most expensive cities on Earth. Almost everything costs significantly more than anywhere else on this list." },
+        schooling: { score: 4, summary: "World-class free public schools. Norwegian instruction. At 4, children attend barnehage (kindergarten) — heavily subsidized. International schools available.", details: ["Barnehage (kindergarten) heavily subsidized — max ~$300–400/mo","Free elementary school from age 6","Oslo International School (OIS) available — expensive (~$20,000/yr)","Norwegian instruction in public schools","High quality — Norway consistently ranks among world's best education systems"] },
+        pet: { score: 3, label: "Moderate", summary: "Norway uses EU-equivalent pet rules. Microchip + rabies + USDA health cert. No quarantine if compliant.", details: ["ISO microchip","Rabies vaccine (21+ days before arrival)","USDA-endorsed health certificate","Norway follows EU pet passport scheme equivalently","No quarantine if compliant","Dogs need tapeworm treatment 1–5 days before arrival"] },
+        transit: { score: 5, label: "Excellent", summary: "Oslo ranked top 3 most walkable European city centers. Excellent T-bane (metro), trams, buses. Very bikeable. Car not needed.", details: ["T-bane (metro): 6 lines","Trams + buses throughout city","Ruter app covers all transit","Excellent cycling infrastructure","Ranked top 3 most walkable European city centers","Car unnecessary in Oslo proper"] },
+        flights: { score: 3, summary: "OSL has direct flights to JFK/EWR/IAD. ~8–9 hrs. Scandinavian Airlines, United, etc. Less frequent than CDG or LHR. Fares $500–800 RT.", hub: "OSL → IAD/EWR → ORF/RIC" },
+        safety: { score: 5, label: "Safest", summary: "Among the safest cities and countries in the world. Extremely family-friendly. Virtually no violent crime." },
+        english: { score: 5, label: "Best", summary: "Norwegians speak English exceptionally well — often better than most Americans expect. Nearly universal English fluency. Easy daily life without Norwegian." },
+        pros: ["Exceptional English skills","World's safest city","Stunning nature (fjords, skiing)","Top-ranked walkability","Excellent subsidized childcare"],
+        cons: ["Most expensive city on list (with London)","Visa pathway complex","Extremely high cost of living","Dark winters","Far from US"]
+      }
+    ];
+
+    const categories = [
+      { id: "visa", label: "Visa / Logistics", icon: "✈️" },
+      { id: "cost", label: "Affordability", icon: "💰" },
+      { id: "transit", label: "Transit / Walkability", icon: "🚶" },
+      { id: "schooling", label: "Child Education", icon: "🎒" },
+      { id: "pet", label: "Cat Import", icon: "🐱" },
+      { id: "safety", label: "Safety", icon: "🛡️" },
+      { id: "flights", label: "Flights Home", icon: "🛫" },
+      { id: "english", label: "English Friendliness", icon: "🗣️" },
+    ];
+
+    const ScoreDots = ({ score, max = 5 }) => (
+      <div style={{ display: "flex", gap: 3 }}>
+        {Array.from({ length: max }).map((_, i) => (
+          <div key={i} style={{ width: 8, height: 8, borderRadius: "50%", backgroundColor: i < score ? "#22c55e" : "#e2e8f0" }} />
+        ))}
+      </div>
+    );
+
+    const getRankings = (categoryId) =>
+      [...destinations].sort((a, b) => (b[categoryId]?.score || 0) - (a[categoryId]?.score || 0)).map((d, i) => ({ ...d, rank: i + 1 }));
+
+    function App() {
+      const [view, setView] = useState("overview");
+      const [selectedDest, setSelectedDest] = useState(null);
+      const [selectedCategory, setSelectedCategory] = useState("visa");
+      const ranked = getRankings(selectedCategory);
+
+      return (
+        <div style={{ fontFamily: "'Georgia', 'Times New Roman', serif", backgroundColor: "#faf9f7", minHeight: "100vh", color: "#1a1a1a" }}>
+          {/* Header */}
+          <div style={{ background: "linear-gradient(135deg, #1e3a5f 0%, #2d5986 50%, #1a4a73 100%)", padding: "2rem", color: "white", borderBottom: "4px solid #c9a84c" }}>
+            <div style={{ maxWidth: 960, margin: "0 auto" }}>
+              <div style={{ fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase", color: "#c9a84c", marginBottom: 8 }}>Family Expat Guide 2025–2026</div>
+              <h1 style={{ fontSize: "clamp(1.4rem, 4vw, 2.4rem)", fontWeight: "normal", margin: 0, lineHeight: 1.2 }}>Where in the World Should<br />Your Family Live for a Year?</h1>
+              <p style={{ fontSize: 13, color: "#b8cfe8", marginTop: 8, marginBottom: 0 }}>US citizens • 2 adults + 1 child (age 4) + 1 cat • Car-free living preferred • Flying home to VA/DC easily</p>
+            </div>
+          </div>
+
+          {/* Nav */}
+          <div style={{ background: "#fff", borderBottom: "1px solid #e2e8f0", position: "sticky", top: 0, zIndex: 10, boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}>
+            <div style={{ maxWidth: 960, margin: "0 auto", display: "flex" }}>
+              {[{ id: "overview", label: "📋 Overview" }, { id: "rankings", label: "🏆 Rankings" }, { id: "detail", label: "🔍 Destination Detail" }].map(tab => (
+                <button key={tab.id} onClick={() => setView(tab.id)} style={{ padding: "0.8rem 1.2rem", border: "none", background: "none", cursor: "pointer", fontSize: 13, fontWeight: view === tab.id ? "600" : "normal", color: view === tab.id ? "#1e3a5f" : "#666", borderBottom: view === tab.id ? "3px solid #1e3a5f" : "3px solid transparent" }}>
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div style={{ maxWidth: 960, margin: "0 auto", padding: "1.5rem 1rem" }}>
+
+            {/* OVERVIEW */}
+            {view === "overview" && (
+              <div>
+                <p style={{ color: "#555", fontSize: 13, marginBottom: 16 }}>Scored 1–5 in each category. Click any destination row to see full details.</p>
+                <div style={{ overflowX: "auto" }}>
+                  <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
+                    <thead>
+                      <tr style={{ background: "#1e3a5f", color: "white" }}>
+                        <th style={{ padding: "10px 12px", textAlign: "left", fontWeight: 500 }}>Destination</th>
+                        {categories.map(c => (
+                          <th key={c.id} style={{ padding: "10px 8px", textAlign: "center", fontWeight: 500, whiteSpace: "nowrap" }}>
+                            {c.icon}<br /><span style={{ fontSize: 10 }}>{c.label}</span>
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {destinations.map((d, i) => (
+                        <tr key={d.id} onClick={() => { setSelectedDest(d); setView("detail"); }}
+                          style={{ cursor: "pointer", background: i % 2 === 0 ? "#fff" : "#f8f9fb", borderBottom: "1px solid #e8eef4" }}
+                          onMouseEnter={e => e.currentTarget.style.background = "#e8f0fb"}
+                          onMouseLeave={e => e.currentTarget.style.background = i % 2 === 0 ? "#fff" : "#f8f9fb"}>
+                          <td style={{ padding: "10px 12px" }}>
+                            <span style={{ fontSize: 16 }}>{d.flag}</span>{" "}<strong style={{ fontSize: 13 }}>{d.name}</strong>
+                          </td>
+                          {categories.map(c => {
+                            const score = d[c.id]?.score || 0;
+                            const color = score >= 4 ? "#16a34a" : score === 3 ? "#ca8a04" : score <= 1 ? "#dc2626" : "#ea580c";
+                            return (
+                              <td key={c.id} style={{ textAlign: "center", padding: "10px 8px" }}>
+                                <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 24, height: 24, borderRadius: "50%", backgroundColor: color, color: "white", fontSize: 11, fontWeight: "bold" }}>{score}</div>
+                              </td>
+                            );
+                          })}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <div style={{ marginTop: 12, display: "flex", gap: 16, flexWrap: "wrap", fontSize: 11, color: "#666" }}>
+                  {[["#16a34a", "5 = Excellent"], ["#ca8a04", "3–4 = Good/OK"], ["#dc2626", "1–2 = Challenging"]].map(([color, label]) => (
+                    <div key={label} style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                      <div style={{ width: 10, height: 10, borderRadius: "50%", backgroundColor: color }} />{label}
+                    </div>
+                  ))}
+                </div>
+                <div style={{ marginTop: 24, padding: "1rem 1.25rem", background: "#fef3c7", border: "1px solid #f59e0b", borderRadius: 8 }}>
+                  <strong style={{ fontSize: 13, color: "#92400e" }}>⚠️ Key Flags for Your Family</strong>
+                  <ul style={{ margin: "8px 0 0 0", paddingLeft: 18, fontSize: 13, color: "#78350f", lineHeight: 1.8 }}>
+                    <li><strong>Japan:</strong> Your cat requires 7+ months of advance prep (180-day rabies waiting period). Start NOW if interested.</li>
+                    <li><strong>London:</strong> No clear 1-year visa pathway for US citizens without a job offer or specific qualifying category.</li>
+                    <li><strong>Costa Rica:</strong> Car is essentially required outside San José — conflicts with your car-free preference.</li>
+                    <li><strong>Canada (both cities):</strong> Only 6 months automatic; extending to a full year requires filing for a Visitor Record before the 6 months expire.</li>
+                    <li><strong>Spain NLV:</strong> Since May 2025, NO remote work is permitted — even online for foreign employers.</li>
+                  </ul>
+                </div>
+              </div>
+            )}
+
+            {/* RANKINGS */}
+            {view === "rankings" && (
+              <div>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 20 }}>
+                  {categories.map(c => (
+                    <button key={c.id} onClick={() => setSelectedCategory(c.id)} style={{ padding: "6px 14px", border: "1px solid", borderColor: selectedCategory === c.id ? "#1e3a5f" : "#d1d5db", borderRadius: 20, background: selectedCategory === c.id ? "#1e3a5f" : "white", color: selectedCategory === c.id ? "white" : "#374151", cursor: "pointer", fontSize: 12, fontWeight: selectedCategory === c.id ? 600 : 400 }}>
+                      {c.icon} {c.label}
+                    </button>
+                  ))}
+                </div>
+                <h2 style={{ fontSize: "1.2rem", fontWeight: "normal", marginBottom: 16, color: "#1e3a5f" }}>
+                  Rankings: {categories.find(c => c.id === selectedCategory)?.label}
+                </h2>
+                <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                  {ranked.map((d, i) => {
+                    const cat = d[selectedCategory];
+                    const score = cat?.score || 0;
+                    const color = score >= 4 ? "#16a34a" : score === 3 ? "#ca8a04" : "#dc2626";
+                    return (
+                      <div key={d.id} onClick={() => { setSelectedDest(d); setView("detail"); }}
+                        style={{ display: "flex", alignItems: "flex-start", gap: 14, padding: "14px 16px", background: "white", border: "1px solid #e2e8f0", borderLeft: `4px solid ${color}`, borderRadius: 8, cursor: "pointer" }}
+                        onMouseEnter={e => e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,0,0,0.1)"}
+                        onMouseLeave={e => e.currentTarget.style.boxShadow = "none"}>
+                        <div style={{ width: 32, height: 32, borderRadius: "50%", background: color, color: "white", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "bold", fontSize: 14, flexShrink: 0 }}>{i + 1}</div>
+                        <div style={{ flex: 1 }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4, flexWrap: "wrap" }}>
+                            <span style={{ fontSize: 18 }}>{d.flag}</span>
+                            <strong style={{ fontSize: 14 }}>{d.name}</strong>
+                            {cat?.label && <span style={{ fontSize: 10, padding: "2px 6px", background: color + "20", color: color, borderRadius: 4, fontWeight: 600 }}>{cat.label}</span>}
+                            <div style={{ marginLeft: "auto" }}><ScoreDots score={score} /></div>
+                          </div>
+                          <p style={{ margin: 0, fontSize: 12, color: "#555", lineHeight: 1.5 }}>{cat?.summary || "See details"}</p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* DETAIL */}
+            {view === "detail" && (
+              <div>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 20 }}>
+                  {destinations.map(d => (
+                    <button key={d.id} onClick={() => setSelectedDest(d)} style={{ padding: "5px 12px", border: "1px solid", borderColor: selectedDest?.id === d.id ? "#1e3a5f" : "#d1d5db", borderRadius: 20, background: selectedDest?.id === d.id ? "#1e3a5f" : "white", color: selectedDest?.id === d.id ? "white" : "#374151", cursor: "pointer", fontSize: 11 }}>
+                      {d.flag} {d.name}
+                    </button>
+                  ))}
+                </div>
+                {!selectedDest ? (
+                  <p style={{ color: "#666" }}>Select a destination above to view full details.</p>
+                ) : (
+                  <div style={{ background: "white", border: "1px solid #e2e8f0", borderRadius: 12, overflow: "hidden" }}>
+                    <div style={{ padding: "1.5rem", background: "linear-gradient(135deg, #1e3a5f, #2d5986)", color: "white" }}>
+                      <div style={{ fontSize: 36, marginBottom: 4 }}>{selectedDest.flag}</div>
+                      <h2 style={{ margin: 0, fontWeight: "normal", fontSize: "1.6rem" }}>{selectedDest.name}</h2>
+                      <p style={{ margin: "4px 0 0 0", color: "#b8cfe8", fontSize: 13 }}>{selectedDest.tagline}</p>
+                      <div style={{ display: "flex", gap: 8, marginTop: 12, flexWrap: "wrap" }}>
+                        {categories.map(c => {
+                          const score = selectedDest[c.id]?.score || 0;
+                          const color = score >= 4 ? "#4ade80" : score === 3 ? "#fbbf24" : "#f87171";
+                          return (
+                            <div key={c.id} style={{ fontSize: 10, padding: "3px 8px", background: "rgba(255,255,255,0.1)", borderRadius: 4, color: color, border: `1px solid ${color}40` }}>
+                              {c.icon} {score}/5
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                    <div style={{ padding: "1.5rem", display: "flex", flexDirection: "column", gap: 20 }}>
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                        <div style={{ padding: "1rem", background: "#f0fdf4", borderRadius: 8, border: "1px solid #bbf7d0" }}>
+                          <strong style={{ fontSize: 12, color: "#166534", display: "block", marginBottom: 8 }}>✅ Pros</strong>
+                          {selectedDest.pros.map((p, i) => <div key={i} style={{ fontSize: 12, color: "#166534", marginBottom: 4 }}>• {p}</div>)}
+                        </div>
+                        <div style={{ padding: "1rem", background: "#fef2f2", borderRadius: 8, border: "1px solid #fecaca" }}>
+                          <strong style={{ fontSize: 12, color: "#991b1b", display: "block", marginBottom: 8 }}>⚠️ Cons</strong>
+                          {selectedDest.cons.map((c, i) => <div key={i} style={{ fontSize: 12, color: "#991b1b", marginBottom: 4 }}>• {c}</div>)}
+                        </div>
+                      </div>
+                      {categories.map(cat => {
+                        const data = selectedDest[cat.id];
+                        if (!data) return null;
+                        const score = data.score || 0;
+                        const color = score >= 4 ? "#16a34a" : score === 3 ? "#ca8a04" : "#dc2626";
+                        return (
+                          <div key={cat.id} style={{ borderTop: "1px solid #e8eef4", paddingTop: 16 }}>
+                            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8, flexWrap: "wrap" }}>
+                              <span style={{ fontSize: 18 }}>{cat.icon}</span>
+                              <strong style={{ fontSize: 14 }}>{cat.label}</strong>
+                              <ScoreDots score={score} />
+                              {data.label && <span style={{ fontSize: 10, padding: "2px 8px", background: color + "15", color: color, borderRadius: 4, border: `1px solid ${color}30`, fontWeight: 600 }}>{data.label}</span>}
+                            </div>
+                            <p style={{ margin: "0 0 8px 0", fontSize: 13, color: "#333" }}>{data.summary}</p>
+                            {data.details && (
+                              <ul style={{ margin: 0, paddingLeft: 18, fontSize: 12, color: "#555", lineHeight: 1.8 }}>
+                                {data.details.map((detail, i) => (
+                                  <li key={i} style={{ color: detail.includes("⚠️") || detail.includes("START") ? "#dc2626" : "#555" }}>{detail}</li>
+                                ))}
+                              </ul>
+                            )}
+                            {cat.id === "cost" && data.monthly && (
+                              <div style={{ marginTop: 8, display: "flex", gap: 12, flexWrap: "wrap" }}>
+                                <div style={{ fontSize: 12, padding: "6px 12px", background: "#f0f9ff", borderRadius: 6, border: "1px solid #bae6fd" }}><strong>Monthly total:</strong> {data.monthly}</div>
+                                <div style={{ fontSize: 12, padding: "6px 12px", background: "#f0f9ff", borderRadius: 6, border: "1px solid #bae6fd" }}><strong>Rent (2BR):</strong> {data.rent}</div>
+                              </div>
+                            )}
+                            {cat.id === "flights" && data.hub && (
+                              <div style={{ fontSize: 12, marginTop: 6, padding: "6px 10px", background: "#fafaf0", borderRadius: 6, border: "1px solid #e0e0a0", color: "#555" }}>Route: {data.hub}</div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
+          <div style={{ textAlign: "center", padding: "2rem 1rem", fontSize: 11, color: "#999", borderTop: "1px solid #e8eef4", marginTop: 32 }}>
+            Based on research through March 2026 • Visa rules and costs change frequently — verify with consulates before planning • This is not legal or immigration advice
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
+
+</body>
+</html>
